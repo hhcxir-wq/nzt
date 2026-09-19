@@ -11,7 +11,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
+  group: pages
   cancel-in-progress: false
 
 jobs:
@@ -21,19 +21,10 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-      - name: Assemble website
-        run: |
-          mkdir -p site
-          cat bundle.parts/part-* > nzt-github-pages.zip
-          unzip -q nzt-github-pages.zip -d site
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v4
+      - uses: actions/checkout@v5
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
         with:
-          path: site
-      - name: Deploy to GitHub Pages
-        id: deployment
+          path: .
+      - id: deployment
         uses: actions/deploy-pages@v4
